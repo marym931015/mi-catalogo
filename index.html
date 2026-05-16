@@ -551,7 +551,7 @@ function renderCategories() {
   const el = document.getElementById('category-tabs');
   el.innerHTML = `<button class="cat-tab ${selectedCat==='all'?'active':''}" onclick="filterBy('all')">Todos</button>`;
   cats.forEach(c => {
-    el.innerHTML += `<button class="cat-tab ${selectedCat===c?'active':''}" onclick="filterBy(${JSON.stringify(c)})">${esc(c)}</button>`;
+    el.innerHTML += `<button class="cat-tab ${selectedCat===c?'active':''}" onclick="filterBy(${esc(JSON.stringify(c))})">${esc(c)}</button>`;
   });
 }
 
