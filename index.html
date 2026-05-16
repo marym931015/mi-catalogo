@@ -445,6 +445,11 @@
           <input type="text" id="s-gh-repo" placeholder="mi-catalogo">
         </div>
         <div class="form-group">
+          <label>Nombre del archivo HTML en el repositorio</label>
+          <input type="text" id="s-gh-html" placeholder="index.html">
+          <p class="form-hint">El nombre con el que subiste el catálogo (normalmente <strong>index.html</strong>). Si lo subiste como <strong>catalogo.html</strong>, ponlo aquí.</p>
+        </div>
+        <div class="form-group">
           <label>Token de acceso personal</label>
           <input type="password" id="s-gh-token" placeholder="ghp_xxxxxxxxxxxx">
           <p class="token-hint">
@@ -815,8 +820,9 @@ function loadSettingsForm() {
   document.getElementById('s-whatsapp').value = s.whatsapp   || '';
   document.getElementById('s-currency').value = s.currency   || '$';
   document.getElementById('s-logo').value     = s.logoEmoji  || '🛒';
-  document.getElementById('s-gh-user').value  = gh.user  || '';
-  document.getElementById('s-gh-repo').value  = gh.repo  || '';
+  document.getElementById('s-gh-user').value  = gh.user     || '';
+  document.getElementById('s-gh-repo').value  = gh.repo     || '';
+  document.getElementById('s-gh-html').value  = gh.htmlFile || 'index.html';
   // token no se pre-rellena por seguridad
 }
 
@@ -858,8 +864,9 @@ function saveSettings() {
 
   // Guardar config de GitHub (nunca entra al HTML exportado)
   const gh = getGHConfig();
-  gh.user  = document.getElementById('s-gh-user').value.trim();
-  gh.repo  = document.getElementById('s-gh-repo').value.trim();
+  gh.user     = document.getElementById('s-gh-user').value.trim();
+  gh.repo     = document.getElementById('s-gh-repo').value.trim();
+  gh.htmlFile = document.getElementById('s-gh-html').value.trim() || 'index.html';
   const tk = document.getElementById('s-gh-token').value.trim();
   if (tk) { gh.token = tk; document.getElementById('s-gh-token').value = ''; }
   saveGHConfig(gh);
@@ -952,36 +959,49 @@ async function publishToGitHub() {
     toast('Configura GitHub primero en ⚙ Configuración','error'); return;
   }
 
-  const btn = document.getElementById('btn-publish');
+  const btn    = document.getElementById('btn-publish');
   const status = document.getElementById('gh-status');
   btn.disabled = true;
   status.className = 'gh-status wait';
   status.textContent = '⏳ Publicando...';
 
-  const data    = JSON.stringify({ products: getProducts(), settings: getSettings() }, null, 2);
-  const content = btoa(unescape(encodeURIComponent(data)));
-  const apiBase = `https://api.github.com/repos/${gh.user}/${gh.repo}/contents/data.json`;
-  const headers = { Authorization: `Bearer ${gh.token}`, 'Content-Type': 'application/json' };
+  const headers  = { Authorization: `Bearer ${gh.token}`, 'Content-Type': 'application/json' };
+  const products = getProducts();
+  const settings = getSettings();
+
+  async function ghPut(path, text, msg) {
+    const url = `https://api.github.com/repos/${gh.user}/${gh.repo}/contents/${path}`;
+    let sha;
+    const r = await fetch(url, { headers });
+    if (r.ok) { const f = await r.json(); sha = f.sha; }
+    const body = { message: msg, content: btoa(unescape(encodeURIComponent(text))) };
+    if (sha) body.sha = sha;
+    const pr = await fetch(url, { method: 'PUT', headers, body: JSON.stringify(body) });
+    if (!pr.ok) { const e = await pr.json(); throw new Error(e.message || pr.status); }
+  }
 
   try {
-    // Obtener SHA actual del archivo (si existe)
-    let sha;
-    const getRes = await fetch(apiBase, { headers });
-    if (getRes.ok) { const f = await getRes.json(); sha = f.sha; }
+    // 1. Actualizar el archivo HTML con los datos embebidos (fix principal)
+    //    Así los visitantes ven los productos aunque data.json falle o no esté.
+    const embeddedData = JSON.stringify({ products, settings });
+    let newHtml = document.documentElement.outerHTML;
+    newHtml = newHtml.replace(
+      /<script[^>]*id="app-data"[^>]*>[\s\S]*?<\/script>/,
+      () => `<script id="app-data" type="application/json">\n  ${embeddedData}\n  <\/script>`
+    );
+    newHtml = newHtml.replace(/(<div id="catalog-view")[^>]*>/, '$1>');
+    newHtml = newHtml.replace(/(<div id="admin-view")[^>]*>/,   '$1 style="display:none">');
 
-    // Crear o actualizar data.json
-    const body = { message: 'Actualizar catálogo', content };
-    if (sha) body.sha = sha;
-    const putRes = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+    const htmlFile = gh.htmlFile || 'index.html';
+    await ghPut(htmlFile, newHtml, 'Actualizar catálogo');
 
-    if (putRes.ok) {
-      status.className = 'gh-status ok';
-      status.textContent = '✓ Publicado. Los clientes verán los cambios en 1-2 minutos al refrescar.';
-      toast('Catálogo publicado en GitHub ✓','success');
-    } else {
-      const err = await putRes.json();
-      throw new Error(err.message || putRes.status);
-    }
+    // 2. Actualizar data.json también (recarga sin reabrir la página)
+    const dataJson = JSON.stringify({ products, settings }, null, 2);
+    await ghPut('data.json', dataJson, 'Actualizar datos').catch(() => {});
+
+    status.className = 'gh-status ok';
+    status.textContent = '✓ Publicado. Los clientes verán los cambios en 1-2 minutos al refrescar.';
+    toast('Catálogo publicado ✓','success');
   } catch(e) {
     status.className = 'gh-status err';
     status.textContent = '✗ Error: ' + e.message;
