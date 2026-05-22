@@ -7,87 +7,102 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --primary: #16a34a; --primary-dark: #15803d; --primary-light: #dcfce7;
-      --text: #1a1a1a; --text-muted: #6b7280; --bg: #f9fafb;
-      --card-bg: #ffffff; --border: #e5e7eb; --radius: 12px;
-      --shadow: 0 2px 8px rgba(0,0,0,0.08); --shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+      --primary: #00843D; --primary-dark: #006B30; --primary-light: #e8f5ee;
+      --accent: #E31E24;
+      --text: #1a1a1a; --text-muted: #6b7280; --bg: #f4f8f5;
+      --card-bg: #ffffff; --border: #ddeee5; --radius: 14px;
+      --shadow: 0 2px 10px rgba(0,132,61,0.08); --shadow-hover: 0 10px 28px rgba(0,132,61,0.18);
     }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* ── HEADER ── */
-    .site-header { background: var(--primary); color: white; padding: 14px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .site-header { background: linear-gradient(135deg, #005828 0%, #006B30 50%, #00843D 100%); color: white; padding: 16px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 18px rgba(0,107,48,0.35); }
     .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-    .store-logo { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-    .store-logo.has-img { border-radius: 6px; background: transparent; width: auto; max-width: 130px; height: 44px; padding: 3px; }
-    .store-logo.has-img img { width: auto; height: 100%; max-width: 124px; object-fit: contain; display: block; }
+    .store-logo { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .store-logo.has-img { border-radius: 8px; background: rgba(255,255,255,0.95); width: auto; max-width: 140px; height: 48px; padding: 4px 8px; }
+    .store-logo.has-img img { width: auto; height: 100%; max-width: 132px; object-fit: contain; display: block; }
     .store-info { flex: 1; min-width: 100px; }
-    .store-name { font-size: 1.15rem; font-weight: 700; }
-    .store-desc { font-size: 0.78rem; opacity: 0.85; }
+    .store-name { font-size: 1.2rem; font-weight: 800; letter-spacing: -0.01em; }
+    .store-desc { font-size: 0.76rem; opacity: 0.82; font-style: italic; margin-top: 1px; }
     .search-box { flex: 1; min-width: 180px; max-width: 380px; position: relative; }
-    .search-box input { width: 100%; padding: 9px 14px 9px 38px; border: none; border-radius: 50px; font-size: 0.88rem; background: rgba(255,255,255,0.2); color: white; outline: none; }
-    .search-box input::placeholder { color: rgba(255,255,255,0.7); }
-    .search-box input:focus { background: rgba(255,255,255,0.3); }
-    .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); }
+    .search-box input { width: 100%; padding: 10px 16px 10px 40px; border: none; border-radius: 50px; font-size: 0.88rem; background: rgba(255,255,255,0.18); color: white; outline: none; transition: background 0.2s; }
+    .search-box input::placeholder { color: rgba(255,255,255,0.65); }
+    .search-box input:focus { background: rgba(255,255,255,0.28); }
+    .search-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); }
+
+    /* ── HERO BANNER ── */
+    .hero-banner { position: relative; overflow: hidden; background: linear-gradient(140deg, #004D22 0%, #006B30 45%, #009944 100%); min-height: 220px; display: flex; align-items: center; }
+    .hero-banner.has-img { min-height: 340px; }
+    .hero-bg-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: none; }
+    .hero-banner.has-img .hero-bg-img { display: block; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,77,34,0.82) 0%, rgba(0,107,48,0.55) 60%, rgba(0,153,68,0.15) 100%); }
+    .hero-banner:not(.has-img) .hero-overlay { background: linear-gradient(140deg, rgba(0,0,0,0.08) 0%, transparent 100%); }
+    .hero-deco { position: absolute; right: 0; top: 0; bottom: 0; width: 45%; background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.07) 0%, transparent 70%); pointer-events: none; }
+    .hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 44px 28px; }
+    .hero-eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 8px; }
+    .hero-title { font-size: clamp(1.4rem, 4vw, 2.1rem); font-weight: 900; letter-spacing: 0.08em; color: white; text-shadow: 0 2px 14px rgba(0,0,0,0.25); line-height: 1.1; }
+    .hero-subtitle { font-size: clamp(1rem, 2.5vw, 1.3rem); font-style: italic; font-weight: 500; color: rgba(255,255,255,0.88); text-shadow: 0 1px 6px rgba(0,0,0,0.2); margin-top: 5px; }
 
     /* ── CATEGORY NAV ── */
-    .category-nav { background: white; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; position: sticky; top: 71px; z-index: 90; }
+    .category-nav { background: white; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; position: sticky; top: 81px; z-index: 90; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
     .category-nav::-webkit-scrollbar { display: none; }
-    .category-tabs { display: flex; gap: 6px; padding: 10px 20px; max-width: 1200px; margin: 0 auto; white-space: nowrap; }
-    .cat-tab { padding: 6px 16px; border-radius: 50px; border: 1.5px solid var(--border); background: none; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--text-muted); transition: all 0.18s; }
-    .cat-tab:hover { border-color: var(--primary); color: var(--primary); }
-    .cat-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+    .category-tabs { display: flex; gap: 7px; padding: 11px 20px; max-width: 1200px; margin: 0 auto; white-space: nowrap; }
+    .cat-tab { padding: 7px 18px; border-radius: 50px; border: 1.5px solid var(--border); background: none; cursor: pointer; font-size: 0.84rem; font-weight: 600; color: var(--text-muted); transition: all 0.18s; white-space: nowrap; }
+    .cat-tab:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .cat-tab.active { background: var(--primary); border-color: var(--primary); color: white; box-shadow: 0 3px 10px rgba(0,132,61,0.3); }
 
     /* ── PRODUCT GRID ── */
-    .catalog-main { max-width: 1200px; margin: 0 auto; padding: 22px 20px; }
-    .results-info { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; }
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; }
-    .product-card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
-    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-    .product-card.unavailable { opacity: 0.6; }
-    .product-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--border); display: block; }
-    .product-img-placeholder { width: 100%; aspect-ratio: 1; background: linear-gradient(135deg,#e5e7eb,#d1d5db); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
-    .product-body { padding: 13px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
-    .product-category { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); }
-    .product-name { font-size: 0.93rem; font-weight: 600; line-height: 1.3; }
-    .product-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; flex: 1; }
-    .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; gap: 6px; flex-wrap: wrap; }
-    .product-price { font-size: 1.15rem; font-weight: 700; color: var(--primary-dark); }
-    .unavailable-badge { font-size: 0.68rem; background: #fee2e2; color: #dc2626; padding: 2px 7px; border-radius: 50px; }
-    .btn-whatsapp { background: #25d366; color: white; border: none; border-radius: 50px; padding: 7px 12px; font-size: 0.78rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background 0.2s; text-decoration: none; }
-    .btn-whatsapp:hover { background: #1ebe5d; }
-    .btn-whatsapp.disabled { background: #9ca3af; pointer-events: none; }
+    .catalog-main { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+    .results-info { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 16px; font-weight: 500; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 20px; }
+    .product-card { background: var(--card-bg); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; transition: transform 0.22s, box-shadow 0.22s; display: flex; flex-direction: column; border: 1px solid rgba(0,132,61,0.07); }
+    .product-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+    .product-card.unavailable { opacity: 0.58; }
+    .product-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: #edf5f0; display: block; }
+    .product-img-placeholder { width: 100%; aspect-ratio: 4/3; background: linear-gradient(135deg, #ddeee5, #c8e4d4); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .product-body { padding: 14px; flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .product-category { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--primary); }
+    .product-name { font-size: 0.94rem; font-weight: 700; line-height: 1.3; color: var(--text); }
+    .product-desc { font-size: 0.77rem; color: var(--text-muted); line-height: 1.45; flex: 1; margin-top: 2px; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 6px; flex-wrap: wrap; }
+    .product-price { font-size: 1.1rem; font-weight: 800; color: var(--primary-dark); background: var(--primary-light); padding: 4px 12px; border-radius: 50px; }
+    .unavailable-badge { font-size: 0.68rem; background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 50px; font-weight: 600; }
+    .btn-whatsapp { background: #25d366; color: white; border: none; border-radius: 50px; padding: 7px 13px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: background 0.2s, transform 0.15s; text-decoration: none; box-shadow: 0 2px 8px rgba(37,211,102,0.3); }
+    .btn-whatsapp:hover { background: #1ebe5d; transform: scale(1.04); }
+    .btn-whatsapp.disabled { background: #9ca3af; pointer-events: none; box-shadow: none; }
 
     /* ── EMPTY / FOOTER ── */
     .empty-state { text-align: center; padding: 70px 20px; color: var(--text-muted); }
     .empty-state .icon { font-size: 3.5rem; margin-bottom: 14px; }
     .empty-state h3 { font-size: 1.05rem; margin-bottom: 6px; color: var(--text); }
-    .site-footer { text-align: center; padding: 28px 20px 18px; color: var(--text-muted); font-size: 0.78rem; }
-    .footer-admin-link { color: var(--text-muted); text-decoration: none; opacity: 0.45; font-size: 0.73rem; }
+    .site-footer { background: white; border-top: 2px solid var(--border); text-align: center; padding: 22px 20px; color: var(--text-muted); font-size: 0.78rem; }
+    .footer-brand { font-weight: 700; color: var(--primary); font-size: 0.88rem; margin-bottom: 3px; }
+    .footer-admin-link { color: var(--text-muted); text-decoration: none; opacity: 0.4; font-size: 0.72rem; display: inline-block; margin-top: 6px; }
     .footer-admin-link:hover { opacity: 1; }
 
     /* ── ADMIN ── */
-    .admin-header { background: var(--primary); color: white; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-    .admin-header h1 { font-size: 1.05rem; }
+    .admin-header { background: linear-gradient(135deg, #005828, #00843D); color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .admin-header h1 { font-size: 1.05rem; font-weight: 700; }
     .admin-container { max-width: 960px; margin: 0 auto; padding: 0 20px 40px; }
     .admin-tabs { display: flex; gap: 2px; padding: 16px 0 0; border-bottom: 2px solid var(--border); margin-bottom: 22px; overflow-x: auto; scrollbar-width: none; }
     .admin-tabs::-webkit-scrollbar { display: none; }
-    .admin-tab { padding: 9px 18px; border: none; background: none; font-size: 0.88rem; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: color 0.15s; }
+    .admin-tab { padding: 9px 18px; border: none; background: none; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; transition: color 0.15s; }
     .admin-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
     .admin-section { display: none; }
     .admin-section.active { display: block; }
 
     /* ── LOGIN ── */
-    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
-    .login-card { background: white; border-radius: 16px; padding: 38px; width: 100%; max-width: 360px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); text-align: center; }
+    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #004D22, #006B30, #00843D); }
+    .login-card { background: white; border-radius: 20px; padding: 42px; width: 100%; max-width: 360px; box-shadow: 0 24px 64px rgba(0,0,0,0.2); text-align: center; }
     .login-icon { font-size: 2.8rem; margin-bottom: 14px; }
-    .login-card h2 { margin-bottom: 6px; }
+    .login-card h2 { margin-bottom: 6px; color: var(--primary-dark); }
     .login-card p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 22px; }
 
     /* ── FORMS ── */
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; font-size: 0.83rem; font-weight: 600; margin-bottom: 5px; }
-    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 9px 13px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: inherit; outline: none; transition: border-color 0.18s; background: white; }
-    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 9px 13px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: inherit; outline: none; transition: border-color 0.18s, box-shadow 0.18s; background: white; }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,132,61,0.1); }
     .form-group textarea { resize: vertical; min-height: 76px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .form-hint { font-size: 0.73rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
@@ -107,10 +122,10 @@
 
     /* ── BUTTONS ── */
     .btn { padding: 9px 18px; border-radius: 8px; border: none; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 7px; }
-    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(0,132,61,0.25); }
     .btn-primary:hover { background: var(--primary-dark); }
     .btn-secondary { background: var(--bg); color: var(--text); border: 1.5px solid var(--border); }
-    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
     .btn-danger { background: #fee2e2; color: #dc2626; }
     .btn-danger:hover { background: #fecaca; }
     .btn-export { background: #1d4ed8; color: white; font-size: 1rem; padding: 13px 26px; }
@@ -121,23 +136,23 @@
     /* ── STATS ── */
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; margin-bottom: 22px; }
     .stat-card { background: white; border-radius: var(--radius); padding: 18px; text-align: center; border: 1.5px solid var(--border); }
-    .stat-number { font-size: 1.9rem; font-weight: 700; color: var(--primary); }
+    .stat-number { font-size: 1.9rem; font-weight: 800; color: var(--primary); }
     .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
 
     /* ── ADMIN PRODUCT LIST ── */
     .admin-product-list { display: flex; flex-direction: column; gap: 10px; }
     .admin-product-item { background: white; border: 1.5px solid var(--border); border-radius: var(--radius); padding: 12px; display: flex; gap: 12px; align-items: center; }
-    .admin-product-thumb { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: var(--bg); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden; }
+    .admin-product-thumb { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: var(--bg); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden; }
     .admin-product-thumb img { width: 60px; height: 60px; object-fit: cover; }
     .admin-product-info { flex: 1; min-width: 0; }
-    .admin-product-name { font-weight: 600; font-size: 0.88rem; }
+    .admin-product-name { font-weight: 700; font-size: 0.88rem; }
     .admin-product-meta { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
     .admin-product-actions { display: flex; gap: 7px; flex-shrink: 0; }
-    .badge { display: inline-block; padding: 2px 7px; border-radius: 50px; font-size: 0.68rem; font-weight: 600; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 50px; font-size: 0.68rem; font-weight: 700; }
     .badge-success { background: var(--primary-light); color: var(--primary-dark); }
     .badge-danger { background: #fee2e2; color: #dc2626; }
 
-    /* ── EXPORT BOX ── */
+    /* ── EXPORT / GITHUB BOX ── */
     .export-box { background: linear-gradient(135deg, #1d4ed8, #1e40af); color: white; border-radius: 16px; padding: 30px; text-align: center; }
     .export-box h3 { font-size: 1.25rem; margin-bottom: 7px; }
     .export-box p { opacity: 0.85; margin-bottom: 22px; font-size: 0.88rem; }
@@ -147,8 +162,6 @@
     .info-box h4 { margin-bottom: 10px; font-size: 0.95rem; }
     .info-box ol { padding-left: 18px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.9; }
     code { background: var(--bg); padding: 1px 6px; border-radius: 4px; font-size: 0.78rem; word-break: break-all; }
-
-    /* ── GITHUB BOX ── */
     .gh-box { background: linear-gradient(135deg,#0f172a,#1e293b); color: white; border-radius: 16px; padding: 30px; margin-bottom: 16px; }
     .gh-box h3 { font-size: 1.2rem; margin-bottom: 6px; }
     .gh-box p  { opacity: 0.8; font-size: 0.88rem; margin-bottom: 20px; }
@@ -176,13 +189,14 @@
       .form-row { grid-template-columns: 1fr; }
       .header-content { flex-direction: column; align-items: stretch; }
       .search-box { max-width: none; }
-      .product-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px; }
+      .product-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 13px; }
       .admin-product-item { flex-wrap: wrap; }
       .admin-product-actions { width: 100%; }
+      .hero-content { padding: 30px 20px; }
     }
   </style>
   <script id="app-data" type="application/json">
-  {"products":[{"id":"demo1","name":"Arroz Blanco 1kg","category":"Abarrotes","description":"Arroz de grano largo, ideal para toda la familia.","price":1.50,"available":true,"imageUrl":"https://picsum.photos/seed/rice99/400/400"},{"id":"demo2","name":"Aceite Vegetal 1L","category":"Abarrotes","description":"Aceite 100% vegetal, perfecto para freír y cocinar.","price":2.25,"available":true,"imageUrl":"https://picsum.photos/seed/oil88/400/400"},{"id":"demo3","name":"Frijoles Rojos 1lb","category":"Abarrotes","description":"Frijoles secos de primera calidad, rinde bastante.","price":0.95,"available":true,"imageUrl":"https://picsum.photos/seed/beans77/400/400"},{"id":"demo4","name":"Leche Entera 1L","category":"Lácteos","description":"Leche fresca entera, rica en calcio y vitaminas.","price":0.90,"available":true,"imageUrl":"https://picsum.photos/seed/milk55/400/400"},{"id":"demo5","name":"Queso Fresco 500g","category":"Lácteos","description":"Queso artesanal fresco, ideal para acompañar tus comidas.","price":3.50,"available":true,"imageUrl":"https://picsum.photos/seed/cheese44/400/400"},{"id":"demo6","name":"Tomates Rojos (lb)","category":"Frutas y Verduras","description":"Tomates frescos y maduros, cosecha del día.","price":0.75,"available":true,"imageUrl":"https://picsum.photos/seed/tomato33/400/400"},{"id":"demo7","name":"Plátanos (racimo)","category":"Frutas y Verduras","description":"Plátanos frescos, dulces y nutritivos.","price":1.20,"available":true,"imageUrl":"https://picsum.photos/seed/banana22/400/400"},{"id":"demo8","name":"Zanahoria (lb)","category":"Frutas y Verduras","description":"Zanahorias frescas y crujientes, perfectas para ensaladas.","price":0.60,"available":true,"imageUrl":"https://picsum.photos/seed/carrot11/400/400"},{"id":"demo9","name":"Coca-Cola 2L","category":"Bebidas","description":"Refresco gaseoso bien frío, para toda la familia.","price":1.80,"available":true,"imageUrl":"https://picsum.photos/seed/cola66/400/400"},{"id":"demo10","name":"Agua Purificada 5 galones","category":"Bebidas","description":"Agua purificada en envase retornable de 5 galones.","price":2.50,"available":true,"imageUrl":"https://picsum.photos/seed/water99/400/400"},{"id":"demo11","name":"Jabón de Lavar x3","category":"Limpieza","description":"Pack de 3 jabones para ropa, elimina manchas difíciles.","price":1.95,"available":true,"imageUrl":"https://picsum.photos/seed/soap12/400/400"},{"id":"demo12","name":"Papel Higiénico x4","category":"Limpieza","description":"Papel doble hoja, suave y resistente.","price":2.80,"available":false,"imageUrl":"https://picsum.photos/seed/paper34/400/400"}],"settings":{"storeName":"Mi Mercado","storeDesc":"Productos frescos y de calidad","whatsapp":"","currency":"$","superPassword":"super1234","password":"admin1234","exportPassword":"export1234","logoEmoji":"🛒"}}
+  {"products":[{"id":"demo1","name":"Arroz Blanco 1kg","category":"Abarrotes","description":"Arroz de grano largo, ideal para toda la familia.","price":1.50,"available":true,"imageUrl":"https://picsum.photos/seed/rice99/400/400"},{"id":"demo2","name":"Aceite Vegetal 1L","category":"Abarrotes","description":"Aceite 100% vegetal, perfecto para freír y cocinar.","price":2.25,"available":true,"imageUrl":"https://picsum.photos/seed/oil88/400/400"},{"id":"demo3","name":"Frijoles Rojos 1lb","category":"Abarrotes","description":"Frijoles secos de primera calidad, rinde bastante.","price":0.95,"available":true,"imageUrl":"https://picsum.photos/seed/beans77/400/400"},{"id":"demo4","name":"Leche Entera 1L","category":"Lácteos","description":"Leche fresca entera, rica en calcio y vitaminas.","price":0.90,"available":true,"imageUrl":"https://picsum.photos/seed/milk55/400/400"},{"id":"demo5","name":"Queso Fresco 500g","category":"Lácteos","description":"Queso artesanal fresco, ideal para acompañar tus comidas.","price":3.50,"available":true,"imageUrl":"https://picsum.photos/seed/cheese44/400/400"},{"id":"demo6","name":"Tomates Rojos (lb)","category":"Frutas y Verduras","description":"Tomates frescos y maduros, cosecha del día.","price":0.75,"available":true,"imageUrl":"https://picsum.photos/seed/tomato33/400/400"},{"id":"demo7","name":"Plátanos (racimo)","category":"Frutas y Verduras","description":"Plátanos frescos, dulces y nutritivos.","price":1.20,"available":true,"imageUrl":"https://picsum.photos/seed/banana22/400/400"},{"id":"demo8","name":"Zanahoria (lb)","category":"Frutas y Verduras","description":"Zanahorias frescas y crujientes, perfectas para ensaladas.","price":0.60,"available":true,"imageUrl":"https://picsum.photos/seed/carrot11/400/400"},{"id":"demo9","name":"Coca-Cola 2L","category":"Bebidas","description":"Refresco gaseoso bien frío, para toda la familia.","price":1.80,"available":true,"imageUrl":"https://picsum.photos/seed/cola66/400/400"},{"id":"demo10","name":"Agua Purificada 5 galones","category":"Bebidas","description":"Agua purificada en envase retornable de 5 galones.","price":2.50,"available":true,"imageUrl":"https://picsum.photos/seed/water99/400/400"},{"id":"demo11","name":"Jabón de Lavar x3","category":"Limpieza","description":"Pack de 3 jabones para ropa, elimina manchas difíciles.","price":1.95,"available":true,"imageUrl":"https://picsum.photos/seed/soap12/400/400"},{"id":"demo12","name":"Papel Higiénico x4","category":"Limpieza","description":"Papel doble hoja, suave y resistente.","price":2.80,"available":false,"imageUrl":"https://picsum.photos/seed/paper34/400/400"}],"settings":{"storeName":"Salki Supermercados","storeDesc":"Calidad, variedad y más cerca de ti","whatsapp":"","currency":"€","superPassword":"super1234","password":"admin1234","exportPassword":"export1234","logoEmoji":"🛒","heroBannerImg":""}}
   </script>
 </head>
 <body>
@@ -195,8 +209,8 @@
     <div class="header-content">
       <div class="store-logo" id="header-logo">🛒</div>
       <div class="store-info">
-        <div class="store-name" id="header-store-name">Mi Mercado</div>
-        <div class="store-desc" id="header-store-desc">Productos frescos y de calidad</div>
+        <div class="store-name" id="header-store-name">Salki Supermercados</div>
+        <div class="store-desc" id="header-store-desc">Calidad, variedad y más cerca de ti</div>
       </div>
       <div class="search-box">
         <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -204,6 +218,18 @@
       </div>
     </div>
   </header>
+
+  <!-- HERO BANNER -->
+  <section class="hero-banner" id="hero-banner">
+    <img class="hero-bg-img" id="hero-bg-img" src="" alt="">
+    <div class="hero-overlay"></div>
+    <div class="hero-deco"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow" id="hero-eyebrow">Supermercados</div>
+      <div class="hero-title">CALIDAD, VARIEDAD</div>
+      <div class="hero-subtitle" id="hero-subtitle">y más cerca de ti</div>
+    </div>
+  </section>
 
   <nav class="category-nav">
     <div class="category-tabs" id="category-tabs"></div>
@@ -220,7 +246,8 @@
   </main>
 
   <footer class="site-footer">
-    <p>© <span id="footer-store-name">Mi Mercado</span></p>
+    <div class="footer-brand" id="footer-store-name">Salki Supermercados</div>
+    <div style="font-style:italic;font-size:0.76rem;color:var(--text-muted)" id="footer-store-desc">Calidad, variedad y más cerca de ti</div>
     <br>
     <a href="#" onclick="showAdmin();return false;" class="footer-admin-link">⚙ Administrar</a>
   </footer>
@@ -372,11 +399,11 @@
 
         <div class="form-group">
           <label>Nombre de la tienda</label>
-          <input type="text" id="s-name" placeholder="Mi Mercado">
+          <input type="text" id="s-name" placeholder="Salki Supermercados">
         </div>
         <div class="form-group">
           <label>Descripción / Slogan</label>
-          <input type="text" id="s-desc" placeholder="Productos frescos y de calidad">
+          <input type="text" id="s-desc" placeholder="Calidad, variedad y más cerca de ti">
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -386,9 +413,28 @@
           </div>
           <div class="form-group">
             <label>Símbolo de moneda</label>
-            <input type="text" id="s-currency" placeholder="$" maxlength="5">
+            <input type="text" id="s-currency" placeholder="€" maxlength="5">
           </div>
         </div>
+
+        <div class="form-group">
+          <label>🖼 Imagen del banner principal</label>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div class="img-preview-container" id="hero-preview" style="width:160px;height:70px;border-radius:8px">🖼</div>
+            <div style="flex:1;min-width:160px">
+              <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+                <label class="btn btn-secondary btn-sm" style="cursor:pointer;position:relative">
+                  📁 Subir imagen
+                  <input type="file" id="s-hero-file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%" onchange="handleHeroUpload(this)">
+                </label>
+                <button type="button" class="btn btn-danger btn-sm" id="hero-clear-btn" style="display:none" onclick="clearHeroImg()">✕ Quitar</button>
+              </div>
+              <p class="form-hint">Imagen amplia (1280×480 px recomendado). Se mostrará como banner en la parte superior del catálogo.</p>
+            </div>
+          </div>
+          <input type="hidden" id="s-hero-img">
+        </div>
+
         <div class="form-group">
           <label>Imagen del logo (reemplaza al emoji)</label>
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
@@ -512,7 +558,7 @@ let isLoggedIn = false;
 let isExportOnly = false;
 let isSuperAdmin = false;
 let editingId = null;
-let _ghProducts = null; // datos vivos cargados de data.json (GitHub Pages)
+let _ghProducts = null;
 let _ghSettings = null;
 
 function getProducts() {
@@ -531,14 +577,12 @@ function getSettings() {
 }
 function persistSettings(s) { localStorage.setItem('mkt_settings', JSON.stringify(s)); }
 
-// GitHub config se guarda en clave separada, nunca se exporta al HTML
 function getGHConfig() {
   const s = localStorage.getItem('mkt_gh_config');
   return s ? JSON.parse(s) : { user: '', repo: '', token: '' };
 }
 function saveGHConfig(cfg) { localStorage.setItem('mkt_gh_config', JSON.stringify(cfg)); }
 
-// Carga data.json desde GitHub Pages (para clientes sin localStorage)
 async function fetchLiveData() {
   if (location.protocol === 'file:') return;
   try {
@@ -569,6 +613,22 @@ async function initCatalog() {
     logoEl.textContent = s.logoEmoji || '🛒';
   }
   document.getElementById('footer-store-name').textContent = s.storeName;
+  const footerDesc = document.getElementById('footer-store-desc');
+  if (footerDesc) footerDesc.textContent = s.storeDesc || '';
+
+  // Hero banner
+  const heroBanner = document.getElementById('hero-banner');
+  const heroBgImg  = document.getElementById('hero-bg-img');
+  const heroEyebrow = document.getElementById('hero-eyebrow');
+  if (heroEyebrow) heroEyebrow.textContent = s.storeName || 'Supermercados';
+  if (s.heroBannerImg) {
+    heroBgImg.src = s.heroBannerImg;
+    heroBanner.classList.add('has-img');
+  } else {
+    heroBgImg.src = '';
+    heroBanner.classList.remove('has-img');
+  }
+
   renderCategories();
   renderCatalog();
 }
@@ -662,7 +722,6 @@ function openAdminPanel() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('admin-panel').style.display = 'block';
   const allTabs = document.querySelectorAll('.admin-tab');
-  // índices: 0=Productos 1=Agregar 2=Configuración 3=Exportar
   if (isExportOnly) {
     allTabs.forEach((t, i) => t.style.display = i === 3 ? 'block' : 'none');
     document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
@@ -673,7 +732,6 @@ function openAdminPanel() {
     switchTab('tab-products');
     refreshAdminList(); updateStats(); loadSettingsForm();
   } else {
-    // gestor de productos: ve todo menos Configuración
     allTabs.forEach((t, i) => t.style.display = i === 2 ? 'none' : 'block');
     switchTab('tab-products');
     refreshAdminList(); updateStats();
@@ -844,9 +902,11 @@ function loadSettingsForm() {
   document.getElementById('s-name').value     = s.storeName  || '';
   document.getElementById('s-desc').value     = s.storeDesc  || '';
   document.getElementById('s-whatsapp').value = s.whatsapp   || '';
-  document.getElementById('s-currency').value = s.currency   || '$';
+  document.getElementById('s-currency').value = s.currency   || '€';
   document.getElementById('s-logo').value     = s.logoEmoji  || '🛒';
   document.getElementById('s-logo-img').value = s.logoImg    || '';
+  document.getElementById('s-hero-img').value = s.heroBannerImg || '';
+
   const lp = document.getElementById('logo-preview');
   if (s.logoImg) {
     lp.innerHTML = `<img src="${esc(s.logoImg)}" style="width:100%;height:100%;object-fit:contain">`;
@@ -855,10 +915,19 @@ function loadSettingsForm() {
     lp.innerHTML = '🏪';
     document.getElementById('logo-clear-btn').style.display = 'none';
   }
+
+  const hp = document.getElementById('hero-preview');
+  if (s.heroBannerImg) {
+    hp.innerHTML = `<img src="${esc(s.heroBannerImg)}" style="width:100%;height:100%;object-fit:cover">`;
+    document.getElementById('hero-clear-btn').style.display = 'inline-flex';
+  } else {
+    hp.innerHTML = '🖼';
+    document.getElementById('hero-clear-btn').style.display = 'none';
+  }
+
   document.getElementById('s-gh-user').value  = gh.user     || '';
   document.getElementById('s-gh-repo').value  = gh.repo     || '';
   document.getElementById('s-gh-html').value  = gh.htmlFile || 'index.html';
-  // token no se pre-rellena por seguridad
 }
 
 function saveSettings() {
@@ -890,16 +959,17 @@ function saveSettings() {
     document.getElementById('s-export-password').value  = '';
     document.getElementById('s-export-password2').value = '';
   }
-  s.storeName  = document.getElementById('s-name').value.trim()     || 'Mi Mercado';
-  s.storeDesc  = document.getElementById('s-desc').value.trim();
-  s.whatsapp   = document.getElementById('s-whatsapp').value.trim().replace(/\D/g,'');
-  s.currency   = document.getElementById('s-currency').value.trim() || '$';
-  s.logoEmoji  = document.getElementById('s-logo').value.trim()     || '🛒';
+  s.storeName      = document.getElementById('s-name').value.trim()     || 'Salki Supermercados';
+  s.storeDesc      = document.getElementById('s-desc').value.trim();
+  s.whatsapp       = document.getElementById('s-whatsapp').value.trim().replace(/\D/g,'');
+  s.currency       = document.getElementById('s-currency').value.trim() || '€';
+  s.logoEmoji      = document.getElementById('s-logo').value.trim()     || '🛒';
   const li = document.getElementById('s-logo-img').value;
   if (li !== undefined) s.logoImg = li;
+  const hi = document.getElementById('s-hero-img').value;
+  if (hi !== undefined) s.heroBannerImg = hi;
   persistSettings(s);
 
-  // Guardar config de GitHub (nunca entra al HTML exportado)
   const gh = getGHConfig();
   gh.user     = document.getElementById('s-gh-user').value.trim();
   gh.repo     = document.getElementById('s-gh-repo').value.trim();
@@ -1024,6 +1094,41 @@ function clearLogoImg() {
   document.getElementById('logo-clear-btn').style.display = 'none';
 }
 
+// ─── HERO BANNER IMAGE ────────────────────────
+function handleHeroUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX_W = 1280, MAX_H = 600;
+      let { width, height } = img;
+      if (width > MAX_W || height > MAX_H) {
+        const r = Math.min(MAX_W / width, MAX_H / height);
+        width = Math.round(width * r); height = Math.round(height * r);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      document.getElementById('s-hero-img').value = dataUrl;
+      const hp = document.getElementById('hero-preview');
+      hp.innerHTML = `<img src="${esc(dataUrl)}" style="width:100%;height:100%;object-fit:cover">`;
+      document.getElementById('hero-clear-btn').style.display = 'inline-flex';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearHeroImg() {
+  document.getElementById('s-hero-img').value = '';
+  document.getElementById('s-hero-file').value = '';
+  document.getElementById('hero-preview').innerHTML = '🖼';
+  document.getElementById('hero-clear-btn').style.display = 'none';
+}
+
 // ─── GITHUB PUBLISH ───────────────────────────
 async function publishToGitHub() {
   const gh = getGHConfig();
@@ -1037,8 +1142,6 @@ async function publishToGitHub() {
   const products = getProducts();
   const settings = getSettings();
 
-  // Capturar HTML ANTES de deshabilitar el botón, para que el archivo
-  // publicado no tenga el botón bloqueado permanentemente.
   const embeddedData = JSON.stringify({ products, settings });
   let newHtml = document.documentElement.outerHTML;
   newHtml = newHtml.replace(
@@ -1066,11 +1169,8 @@ async function publishToGitHub() {
   try {
     const htmlFile = gh.htmlFile || 'index.html';
     await ghPut(htmlFile, newHtml, 'Actualizar catálogo');
-
-    // 2. Actualizar data.json también (recarga sin reabrir la página)
     const dataJson = JSON.stringify({ products, settings }, null, 2);
     await ghPut('data.json', dataJson, 'Actualizar datos').catch(() => {});
-
     status.className = 'gh-status ok';
     status.textContent = '✓ Publicado. Los clientes verán los cambios en 1-2 minutos al refrescar.';
     toast('Catálogo publicado ✓','success');
@@ -1091,7 +1191,6 @@ function exportCatalog() {
     /<script[^>]*id="app-data"[^>]*>[\s\S]*?<\/script>/,
     () => `<script id="app-data" type="application/json">\n  ${data}\n  <\/script>`
   );
-  // Siempre mostrar el catálogo al abrir el archivo exportado
   newHtml = newHtml.replace(/(<div id="catalog-view")[^>]*>/,  '$1>');
   newHtml = newHtml.replace(/(<div id="admin-view")[^>]*>/,    '$1 style="display:none">');
   const blob = new Blob([newHtml], { type: 'text/html;charset=utf-8' });
